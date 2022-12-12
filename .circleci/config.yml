@@ -23,8 +23,9 @@ jobs:
               --filters "Name=tag:Name,Values=node-web-server" \
               --output text)
             echo $FRONTEND_IP > workspace/echo-output
+            export API_URL="http://${FRONTEND_IP}:3000"
             #URL="1.2.3.4"
-            #echo $URL > workspace/echo-output
+            #echo $API_URL > workspace/echo-output
             cat workspace/echo-output
       #- run: echo "Hello, world!" > workspace/echo-output
       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job.
