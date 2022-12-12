@@ -21,7 +21,7 @@ jobs:
               --filters "Name=tag:Name,Values=node-web-server" \
               --output text)
       #- run: echo $FRONTEND_IP > workspace/echo-output
-      - run: cat "testing..." > workspace/echo-output
+      - run: echo "testing..." > workspace/echo-output
       - run: cat workspace/echo-output
       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job.
       - persist_to_workspace:
