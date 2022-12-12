@@ -18,8 +18,13 @@ jobs:
           name: Write url to file
           command: |
             mkdir -p workspace
-            URL="1.2.3.4"
-            echo $URL > workspace/echo-output
+            export FRONTEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=node-web-server" \
+              --output text)
+            echo $FRONTEND_IP > workspace/echo-output
+            #URL="1.2.3.4"
+            #echo $URL > workspace/echo-output
             cat workspace/echo-output
       #- run: echo "Hello, world!" > workspace/echo-output
       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job.
