@@ -14,11 +14,14 @@ jobs:
           name: Install tar utility
           command: |
             yum install -y tar gzip
-      - run: mkdir -p workspace
-      - run: URL="1.2.3.4"
-      - run: echo $URL > workspace/echo-output
+      - run:
+          name: Write URL To File
+          command: |
+            mkdir -p workspace
+            URL="1.2.3.4"
+            echo $URL > workspace/echo-output
       #- run: echo "Hello, world!" > workspace/echo-output
-      - run: cat workspace/echo-output
+            cat workspace/echo-output
       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job.
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
