@@ -15,8 +15,14 @@ jobs:
           command: |
             yum install -y tar gzip
       - run: mkdir -p workspace
-      - run: echo "Hello, world!" > workspace/echo-output
-
+      #- run: echo "Hello, world!" > workspace/echo-output
+      - run: export FRONTEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=node-web-server" \
+              --output text)
+      - run: export API_URL="http://${FRONTEND_IP}:3000"
+      - run: echo $API_URL > workspace/echo-output
+      - run: cat workspace/echo-output
       # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job.
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
@@ -36,13 +42,13 @@ jobs:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: /tmp/workspace
-
-      - run: |
-          if [[ `cat /tmp/workspace/echo-output` == "Hello, world!" ]]; then
-            echo "It worked!";
-          else
-            echo "Nope!"; exit 1
-          fi
+      - run: cat /tmp/workspace/echo-output
+      # - run: |
+      #     if [[ `cat /tmp/workspace/echo-output` == "Hello, world!" ]]; then
+      #       echo "It worked!";
+      #     else
+      #       echo "Nope!"; exit 1
+      #     fi
 
 workflows:
   btd:
